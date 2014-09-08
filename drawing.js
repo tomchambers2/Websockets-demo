@@ -3,8 +3,15 @@ var currentPosition = {};
 var circles = [];
 var dropping = [];
 var score = 0;
-var hitScore = 100;
 var loading = true;
+var gameOver = false;
+var timePassed = 0;
+
+var HIT_SCORE = 100;
+var DROP_RATE = 30; //will drop 1 in every n frames
+var FONT_FAMILY = 'Coda';
+var FONT_SIZE = 30;
+var TIME_IN_SECONDS = 120;
 
 socket.on('rotation', function(msg) {
 	if (loading===true) {
@@ -22,8 +29,8 @@ socket.on('rotation', function(msg) {
 });
 
 socket.on('hit', function(msg) {
-	if (msg === 'hit' && !loading) {
-		fireItem($('.handle.nw').offset().left + phoneWidth, $('.handle.nw').offset().top);
+	if (!loading) {
+		fireItem($('.handle.nw').offset().left + phoneWidth, $('.handle.nw').offset().top, msg.strength);
 	}
 });
 
@@ -42,28 +49,85 @@ function dropItem() {
 	raster.scale(0.3)
 	raster.velocity = 1;
 	raster.fillColor = 'green';
-	dropping.push(raster);	
+	dropping.push(raster);
 };
 
-function fireItem(x,y) {
+function fireItem(x,y,strength) {
 	var circle = new Path.Circle(new Point(x,y), 30);
 	circle.fillColor = 'black';
-	circle.velocityY = 14;
-	circle.velocityX = 14;
-	circle.velocityZ = 14;
+	var velocity = 14 * (strength / 100);
+	circle.velocityY = velocity;
+	circle.velocityX = velocity;
+	circle.velocityZ = velocity;
 	circle.angle = currentPosition.z;
 	circle.angleX = currentPosition.x;
 	circle.hits = 0;
+	circle.kills = [];
 	circles.push(circle);
 };
 
 function addToScore(increment) {
 	score += increment;
-	scoreText.innerHTML = score;
+	scoreText.content = 'Score: '+score;
+}
+var scoreText = new PointText(new Point(30,40));
+scoreText.fontFamily = FONT_FAMILY;
+scoreText.fontSize = FONT_SIZE;
+scoreText.fillColor = 'black';
+addToScore(0);
+
+function str_pad_left(string,pad,length){   return (new Array(length+1).join(pad)+string).slice(-length);   } 
+function updateTimerSeconds(seconds) {
+	timerMinutes = Math.floor(seconds / 60);
+	timerSeconds = seconds - timerMinutes * 60;
+	timerFormatted = str_pad_left(timerMinutes,'0',2) + ':' + str_pad_left(timerSeconds,'0',2);
+	timerText.content = 'Time remaining: '+timerFormatted;
+}
+
+var timerText = new PointText(new Point(view.bounds.width - 335,40));
+timerText.fontFamily = FONT_FAMILY;
+timerText.fontSize = FONT_SIZE;
+timerText.fillColor = 'black';
+var timer = TIME_IN_SECONDS;
+updateTimerSeconds(timer);
+
+function restartGame() {
+	score = 0;
+	timer = TIME_IN_SECONDS;
+	updateTimerSeconds(timer);
+	gameOver = false;
+	document.getElementById('gameover').style.display = 'none';
+	for (var i = 0;i<circles.length;i++) {
+		circles[i].remove();
+	}
+	circles = [];
+	for (var i = 0;i<dropping.length;i++) {
+		dropping[i].remove();
+	}
+	dropping = [];
 }
 
 function onFrame(event) {
 	if (loading) return;
+	if (gameOver) {
+		console.log('game over, done');
+		document.getElementById('gameover').style.display = 'block';
+		document.getElementById('final-score').innerHTML = score;
+		document.getElementById('restart-button').addEventListener('click', function() {
+			restartGame();
+		});
+		return;
+	}
+
+	if (event.time > timePassed + 1) {
+		timer -= 1;
+		if (timer<=0) {
+			gameOver = true;
+		}
+		updateTimerSeconds(timer);
+		timePassed = event.time;
+	}
+
 	for (var i = 0;i<circles.length;i++) {
 		if (circles[i].bounds.top > view.bounds.height) {
 			circles[i].remove();
@@ -87,6 +151,10 @@ function onFrame(event) {
 		circles[i].position.y -= moveY;
 
 		for (var j = 0;j<dropping.length;j++) {
+			if (circles[i].kills.indexOf(dropping[j].id) > -1) {
+				console.log('already hit');
+				continue;
+			};
 			var point = new Point(dropping[j].position.x, dropping[j].position.y);
 			var hitOptions = {
 				fill: true,
@@ -95,14 +163,18 @@ function onFrame(event) {
 				tolerance: 65
 			}
 			if (circles[i].hitTest(point, hitOptions)) {
+				console.log(dropping[j].id);
+				circles[i].kills.push(dropping[j].id);
 				dropping[j].fillColor = 'red';
 				dropping[j].velocity = 10;
-				//addToScore(hitScore);
+				addToScore(HIT_SCORE);
 				circles[i].hits++;
-				if (circles[i].hits > 1) {
-					//needs to track which men it has hit, don't add hits for same man twice
-					console.log("MULTI HIT COMBO!!!",circles[i].hits)
+				if (circles[i].hits === 2) {
+					console.log("DOUBLE HIT COMBO!!!",circles[i].hits);
 				}
+				if (circles[i].hits > 2) {
+					console.log("MULTI HIT COMBO!!!",circles[i].hits);
+				}				
 			}
 		}
  	}
@@ -116,7 +188,7 @@ function onFrame(event) {
 		dropping[k].position.y += dropping[k].velocity;
 	}
 
-	if (event.count % 100 === 0) {
+	if (event.count % DROP_RATE === 0) {
 		dropItem();
 	}
 };

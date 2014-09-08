@@ -67,6 +67,23 @@ html, body {
 	z-index: 10000;
 	text-align:center;
 }
+#gameover {
+	position: fixed;
+	top: 20%;
+	left: calc(28% - 50px);
+	border: 15px solid black;
+	outline: 10px solid #E6E6E6;
+	width: 40%;
+	padding: 2%;
+	background: #fff;
+	z-index: 10000;
+	text-align:center;
+	display: none;
+}
+#restart-button {
+	padding: 4px;
+	font-size: 20px;
+}
 h1 {
 	font-family: 'Changa One', cursive;
 	text-transform: uppercase;
