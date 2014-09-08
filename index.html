@@ -6,10 +6,28 @@
 	<script src="https://cdn.socket.io/socket.io-1.1.0.js"></script>
 	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<script src="paper-full.min.js"></script>
+	<script src="main.js"></script>
 	<script src="drawing.js" type="text/paperscript" canvas="drawing"></script>
 	<link rel="stylesheet" href="style.css">
+	<link href='http://fonts.googleapis.com/css?family=Changa+One|Coda' rel='stylesheet' type='text/css'>
 </head>
 <body>
+	<img src="images/parachute.png" id="parachute" style="display:none" alt="">
+	<div id="intro">
+		<h1>Megacannon 1.0</h1>
+		<p>Vanquish your enemies with the power of a thousand suns. Nations will quake in the shadow of your megacannon.</p>
+		<p>Use your smartphone as a controller by waving it around a bit like a Wii controller. The game uses the gyroscope to track the direction its pointing.</p>
+
+		<h3>Go to http://url.com/phone on your phone and enter this code</h3>
+
+		<h2>Your code: <span id="code"></span></h2>
+
+		<h3>The game will start automatically when you put in the code</h3>
+	</div>
+
+	<div id="score-container">Score: <span id="score">Nil point</span></div>
+	<div id="timer-container">Time: <span id="timer">2:00</span></div>
+
 	<canvas id="drawing" resize></canvas>
 	<div class="phone" id="phone">
 	  <div class="handle nw"></div>

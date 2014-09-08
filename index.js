@@ -18,12 +18,28 @@ app.get('/phone.js', function(req,res) {
 	res.sendfile('phone.js');
 });
 
+app.get('/main.js', function(req,res) {
+	res.sendfile('main.js');
+});
+
 app.get('/main_move.js', function(req,res) {
 	res.sendfile('main_move.js');
 });
 
 app.get('/images/sword.png', function(req,res) {
 	res.sendfile('images/sword.png');
+});
+
+app.get('/images/cannon.png', function(req,res) {
+	res.sendfile('images/cannon.png');
+});
+
+app.get('/images/megacannon.png', function(req,res) {
+	res.sendfile('images/megacannon.png');
+});
+
+app.get('/images/parachute.png', function(req,res) {
+	res.sendfile('images/parachute.png');
 });
 
 app.get('/main.js', function(req,res) {
@@ -38,20 +54,23 @@ app.get('/drawing.js', function(req,res) {
 	res.sendfile('drawing.js');
 });
 
-var channel = '4995';
-var lastMove;
 io.on('connection', function(socket) {
-	console.log('a user connected');
+	console.log('a user connected',socket.id);
 
-	socket.on('4995', function(msg) {
-		//console.log(msg);
-		io.emit('4995', msg);
-	})
+	var channel;
 
-	socket.on('5000', function(msg) {
-		console.log(msg);
-		io.emit('5000', msg);
-	})
+	socket.on('establish', function(channel) {
+		socket.join(channel);
+		console.log(channel);
+
+		socket.on('rotation', function(msg) {
+			io.sockets.in(channel).emit('rotation', msg);
+		});
+
+		socket.on('hit', function(msg) {
+			io.sockets.in(channel).emit('hit', msg);
+		});	
+	});
 
 	socket.on('disconnect', function() {
 		console.log('user disconnected');

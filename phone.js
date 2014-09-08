@@ -1,24 +1,25 @@
-//add touch element
 window.onload = function() {
-//check we have a channel to go to
-	var channel = '4995';
-	//open websocket connection
+	var channel = prompt("Enter the code from http://url.com to link and start playing");
+
+	FastClick.attach(document.body);
+
 	var socket = io();	
-	var touchPad = document.getElementById('touch');
-	touchPad.addEventListener('click', function() {
-		socket.emit('5000', 'hit');
-	});
-
-	var channel = '4995';
-
 	if (channel) {
+		socket.emit('establish',channel);
+
+		var touchPad = document.getElementById('touch');
+		touchPad.addEventListener('click', function() {
+			socket.emit('hit', 'hit');
+		});
+
 		window.addEventListener('deviceorientation', function(event) {
 			var orientation = {
 				x: event.beta,
 				y: event.gamma,
 				z: event.alpha
 			}
-			socket.emit('4995', orientation);
+			socket.emit('rotation', orientation);
+			console.log('rotation');
 		});
 	}	
 }
