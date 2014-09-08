@@ -7,11 +7,14 @@ var loading = true;
 var gameOver = false;
 var timePassed = 0;
 
+var TOTAL_LIVES = 5;
 var HIT_SCORE = 100;
-var DROP_RATE = 30; //will drop 1 in every n frames
+var DROP_RATE = 150; //will drop 1 in every n frames
 var FONT_FAMILY = 'Coda';
 var FONT_SIZE = 30;
 var TIME_IN_SECONDS = 120;
+
+var LIVES = TOTAL_LIVES;
 
 socket.on('rotation', function(msg) {
 	if (loading===true) {
@@ -29,7 +32,7 @@ socket.on('rotation', function(msg) {
 });
 
 socket.on('hit', function(msg) {
-	if (!loading) {
+	if (!loading && !gameOver) {
 		fireItem($('.handle.nw').offset().left + phoneWidth, $('.handle.nw').offset().top, msg.strength);
 	}
 });
@@ -49,6 +52,7 @@ function dropItem() {
 	raster.scale(0.3)
 	raster.velocity = 1;
 	raster.fillColor = 'green';
+	raster.rotation = 0;
 	dropping.push(raster);
 };
 
@@ -91,9 +95,38 @@ timerText.fillColor = 'black';
 var timer = TIME_IN_SECONDS;
 updateTimerSeconds(timer);
 
+function decrementLives() {
+	LIVES -= 1;
+	livesText.content = 'Lives: '+LIVES;
+	if (LIVES<1) {
+		gameOver = true;
+		showMessage('TOO MANY GOT THROUGH');
+		showMessage('GAME OVER');
+		showMessage('YOU HAVE DIED');
+		showMessage('OUT OF LIVES');
+	}
+}
+var livesText = new PointText(new Point(view.bounds.width / 2 - 100,40));
+livesText.fontFamily = FONT_FAMILY;
+livesText.fontSize = FONT_SIZE;
+livesText.fillColor = 'black';
+livesText.content = 'Lives: '+LIVES;
+
+function showMessage(content) {
+	var message = new PointText(new Point(view.bounds.width, view.bounds.height) * Point.random());
+	message.content = content;
+	message.fontFamily = FONT_FAMILY;
+	message.fontSize = 60;	
+	setTimeout(function() {
+		message.content = '';
+	},2000)
+}
+
 function restartGame() {
 	score = 0;
 	timer = TIME_IN_SECONDS;
+	LIVES = TOTAL_LIVES;
+	livesText.content = 'Lives: '+LIVES;
 	updateTimerSeconds(timer);
 	gameOver = false;
 	document.getElementById('gameover').style.display = 'none';
@@ -110,7 +143,6 @@ function restartGame() {
 function onFrame(event) {
 	if (loading) return;
 	if (gameOver) {
-		console.log('game over, done');
 		document.getElementById('gameover').style.display = 'block';
 		document.getElementById('final-score').innerHTML = score;
 		document.getElementById('restart-button').addEventListener('click', function() {
@@ -152,7 +184,6 @@ function onFrame(event) {
 
 		for (var j = 0;j<dropping.length;j++) {
 			if (circles[i].kills.indexOf(dropping[j].id) > -1) {
-				console.log('already hit');
 				continue;
 			};
 			var point = new Point(dropping[j].position.x, dropping[j].position.y);
@@ -163,17 +194,19 @@ function onFrame(event) {
 				tolerance: 65
 			}
 			if (circles[i].hitTest(point, hitOptions)) {
-				console.log(dropping[j].id);
 				circles[i].kills.push(dropping[j].id);
+				dropping[j].dead = true;
 				dropping[j].fillColor = 'red';
 				dropping[j].velocity = 10;
 				addToScore(HIT_SCORE);
 				circles[i].hits++;
 				if (circles[i].hits === 2) {
-					console.log("DOUBLE HIT COMBO!!!",circles[i].hits);
+					showMessage('DOUBLE HIT! 300 POINTS');
+					addToScore(300);
 				}
 				if (circles[i].hits > 2) {
-					console.log("MULTI HIT COMBO!!!",circles[i].hits);
+					showMessage('COMBO HIT!! 1000 POINTS');
+					addToScore(1000);
 				}				
 			}
 		}
@@ -182,6 +215,9 @@ function onFrame(event) {
 	for (var k = 0;k<dropping.length;k++) {
 		if (dropping[k].bounds.top > view.bounds.height) {
 			dropping[k].remove();
+			if (!dropping[k].dead) {
+				decrementLives();
+			};
 			dropping.splice(k, 1);
 			continue;
 		}
