@@ -1,0 +1,26 @@
+{
+  "name": "websockets_demo",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "version": "0.0.0",
+  "engines": {
+    "node": "0.10.x"
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tomchambers2/Websockets-demo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tomchambers2/Websockets-demo/issues"
+  },
+  "homepage": "https://github.com/tomchambers2/Websockets-demo",
+  "dependencies": {
+    "express": "^4.8.8",
+    "indexof": "0.0.1",
+    "socket.io": "^1.1.0"
+  }
+}
