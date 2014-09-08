@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Websockets demo</title>
+	<script src="https://cdn.socket.io/socket.io-1.1.0.js"></script>
+	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script src="snap.svg-min.js"></script>
+	<script src="main_move.js"></script>
+	<style>
+		body {
+		}
+		.phone {
+			background: url(images/phone.png) no-repeat;
+			height: 604px;
+			width: 132px;
+			background-size: contain;
+			position: absolute;
+			left: 40%;
+			top: 40%;
+			//transform-origin: center bottom;
+		}
+	</style>
+</head>
+<body>
+	<svg id="drawing"></svg>
+	<div class="phone" id="phone"></div>
+</body>
+</html>
