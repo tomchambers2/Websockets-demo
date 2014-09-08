@@ -7,67 +7,15 @@
 	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<script src="paper-full.min.js"></script>
 	<script src="drawing.js" type="text/paperscript" canvas="drawing"></script>
-	<script src="main.js"></script>
-	<style>
-		html, body {
-			height: 100%;
-			width: 100%;
-		}
-		.phone {
-			background: url(images/sword.png) no-repeat;
-			height: 604px;
-			width: 132px;
-			background-size: contain;
-			position: absolute;
-			left: 40%;
-			top: 40%;
-			transform-origin: center bottom;
-			border: 1px solid black;
-		}
-
-		#touch {
-			height: 100%;
-			width: 100%;
-			background-color: orange;
-		}
-		#drawing {
-			background: none;
-		}
-		.handle {
-		    background: none;
-		    height: 0px;
-		    position: absolute;
-		    width: 0px;
-		    border: 1px solid black;
-		}   
-		.handle.nw {
-		    left: 0;
-		    top: 0;
-		}   
-		.handle.ne {
-		    right: 0;
-		    top: 0;
-		}   
-		.handle.se {
-		    right: 0;
-		    bottom: 0;
-		}       
-		.handle.sw {
-		    left: 0;
-		    bottom: 0;
-		}		
-	</style>
+	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<button id="fireButton">Fire!</button>
 	<canvas id="drawing" resize></canvas>
 	<div class="phone" id="phone">
-	  <div class="handle nw">NW</div>
-	  <div class="handle ne">NE</div>
-	  <div class="handle se">SE</div>
-	  <div class="handle sw">SW</div>
+	  <div class="handle nw"></div>
+	  <div class="handle ne"></div>
+	  <div class="handle se"></div>
+	  <div class="handle sw"></div>
 	</div>
-
-	<div id="touch">stuff</div>
 </body>
 </html>

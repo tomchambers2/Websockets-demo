@@ -1,0 +1,37 @@
+html, body {
+	height: 100%;
+	width: 100%;
+	margin: 0
+}
+.phone {
+	background: url(images/sword.png) no-repeat;
+	height: 604px;
+	width: 132px;
+	background-size: contain;
+	position: absolute;
+	left: 40%;
+	bottom: 3%;
+	transform-origin: center bottom;
+}
+.handle {
+    background: none;
+    height: 0px;
+    position: absolute;
+    width: 0px;
+}   
+.handle.nw {
+    left: 0;
+    top: 0;
+}   
+.handle.ne {
+    right: 0;
+    top: 0;
+}   
+.handle.se {
+    right: 0;
+    bottom: 0;
+}       
+.handle.sw {
+    left: 0;
+    bottom: 0;
+}	

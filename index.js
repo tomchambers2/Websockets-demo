@@ -6,20 +6,20 @@ app.get('/', function(req,res) {
 	res.sendfile('index.html');
 });
 
-app.get('/move', function(req,res) {
-	res.sendfile('phone_move.html');
+app.get('/style.css', function(req,res) {
+	res.sendfile('style.css');
+});
+
+app.get('/phone', function(req,res) {
+	res.sendfile('phone.html');
+});
+
+app.get('/phone.js', function(req,res) {
+	res.sendfile('phone.js');
 });
 
 app.get('/main_move.js', function(req,res) {
 	res.sendfile('main_move.js');
-});
-
-app.get('/test', function(req,res) {
-	res.sendfile('test.html');
-});
-
-app.get('/images/phone.png', function(req,res) {
-	res.sendfile('images/phone.png');
 });
 
 app.get('/images/sword.png', function(req,res) {
@@ -28,10 +28,6 @@ app.get('/images/sword.png', function(req,res) {
 
 app.get('/main.js', function(req,res) {
 	res.sendfile('main.js');
-});
-
-app.get('/snap.svg-min.js', function(req,res) {
-	res.sendfile('snap.svg-min.js');
 });
 
 app.get('/paper-full.min.js', function(req,res) {
