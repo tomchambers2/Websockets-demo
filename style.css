@@ -3,6 +3,26 @@ html, body {
 	width: 100%;
 	margin: 0;
 	font-family: 'Coda', cursive;
+
+	background: url(images/space_bg.jpg);
+	background-size: cover;
+	overflow: hidden;
+}
+p {
+	text-align: justify;
+}
+.base {
+	background: url(images/base.png);
+	left: 40px;
+	right: 0;
+	margin: auto;
+	position: absolute;
+	z-index: 2000;
+	height: 189px;
+	width: 412px;
+	background-size: contain;
+	bottom: 0;
+	transform: translate3d(0,0,0);	
 }
 .phone {
 	background: url(images/megacannon.png) no-repeat;
@@ -10,13 +30,14 @@ html, body {
 	width: 141px;
 	background-size: contain;
 	position: absolute;
-	left: 40%;
-	bottom: 3%;
+	left: 0;
+	right: 0;
+	margin: auto;
+	bottom: 140px;
 	transform-origin: center bottom;
-
-	background-color: #000;
-	transform-style: preserve-3d;
+	z-index: 1000;
 }
+/*
 .phone:before {
 	background-color: #262626;
     background-image: -webkit-linear-gradient(hsla(0,0%,100%,.25), hsla(0,0%,0%,.25));
@@ -43,6 +64,7 @@ html, body {
     width: 20px;
     z-index: -10;
 }
+*/
 #score-container {
 	position: fixed;
 	top: 10px;
@@ -57,29 +79,33 @@ html, body {
 }
 #intro {
 	position: fixed;
-	top: 20%;
-	left: calc(28% - 50px);
+	top: 4%;
+	left: calc(8% - 25px);
 	border: 15px solid black;
 	outline: 10px solid #E6E6E6;
-	width: 40%;
-	padding: 2%;
+	width: 80%;
+	padding: 0 2%;
 	background: #fff;
 	z-index: 10000;
 	text-align:center;
 }
 #gameover {
 	position: fixed;
-	top: 20%;
-	left: calc(28% - 50px);
+	top: 2%;
+	left: calc(8% - 50px);
 	border: 15px solid black;
 	outline: 10px solid #E6E6E6;
-	width: 40%;
-	padding: 2%;
+	width: 80%;
+	padding: 0 2%;
 	background: #fff;
 	z-index: 10000;
 	text-align:center;
 	display: none;
 }
+#won, #died {
+	display: none;
+}
+
 #restart-button {
 	padding: 4px;
 	font-size: 20px;

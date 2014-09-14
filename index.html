@@ -10,27 +10,60 @@
 	<script src="drawing.js" type="text/paperscript" canvas="drawing"></script>
 	<link rel="stylesheet" href="style.css">
 	<link href='http://fonts.googleapis.com/css?family=Changa+One|Coda' rel='stylesheet' type='text/css'>
+
+	<script type="text/javascript">var switchTo5x=true;</script>
+	<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+	<script type="text/javascript">stLight.options({publisher: "2e726aa2-c08e-42bb-85f3-be6d9f93037f", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>	
 </head>
 <body>
-	<img src="images/parachute.png" id="parachute" style="display:none" alt="">
+	<img src="images/parachute.png" id="parachute" style="display:none">
+	<img src="images/explosion.png" id="explosion" style="display:none">
 	<div id="intro">
-		<h1>Megacannon 1.0</h1>
-		<p>Vanquish your enemies with the power of a thousand suns. Nations will quake in the shadow of your megacannon.</p>
-		<p>Use your smartphone as a controller by waving it around a bit like a Wii controller. The game uses the gyroscope to track the direction its pointing.</p>
+		<h1>Megaspacecannon 1000</h1>
+		<p>The year is 2035. Probes seeking out inhabitable planets have all failed and are now returning to earth. However, the earth's population has grown so large that even more one more returning astronaut could cause the crust to collapse. This would mean that an employee of NASA would have to fill in a form.</p>
 
-		<h3>Go to http://url.com/phone on your phone and enter this code</h3>
+		<p>You are that employee of NASA and rather than pick up a damned pen you decided to retrofit a terrestial telescope into mankind's deadliest weapon - the cannon. You follow the winding track up to the observatory and wipe the sweat from your brow as you grip the improvised cannon controls. You're just like Will Smith in Independence Day.</p>
 
-		<h2>Your code: <span id="code"></span></h2>
+		<h2>To play follow these instructions:</h2>
+		
+		<h3>Controls: the cannon aims where the phone does. Tap to fire. Longer tap = more power</h3>
+		<h3>1. Go to http://is.gd/8pcIdh on your phone</h3>
 
-		<h3>The game will start automatically when you put in the code</h3>
+		<h3>2. On your phone enter this code: <span id="code">----</span></h3>
+
+		<h3>3. The game will start automatically</h3>
+		<p>Created by <a href="http://www.tomchambers.me">Tom Chambers</a>. <a href="mailto:tomchambers@gmail.com">Report bug</a></p>
 	</div>
 
 	<div id="gameover">
-		<h1>Megacannon 1.0</h1>
-		<h2><strong>Game over</strong></h2>
+		<h1>Megaspacecannon 1000</h1>
+
 		<h2>Final score: <span id="final-score">---</span></h2>
 
-		<div id="restart-button">Try again?</div>
+		<section id="died">
+			<h2>YOU LOST!</h2>
+			<p>We're overrun with stinking astronauts! Run for your lives! Try again if you want to save the earth. Or not, you know, it's up to you.</p>
+		</section>
+		<section id="won">
+			<h2>YOU WON!</h2><p>
+			Although some dastardly astronauts managed to make it down to earth, they've undergone too much muscle wasting to be a nuisance and will be quietly dealt with by men in sunglasses. There will be a parade in your honour in every street in your undeveloped backwater nation.</p>
+		</section>
+		
+		<h2>NASA Employee status: Level <span id="employee-status">---</span></h2>
+
+		<div id="restart-button">Click here to try again</div>
+
+		<p style="text-align:center">
+			<span class='st_sharethis_large' displayText='ShareThis'></span>
+			<span class='st_facebook_large' displayText='Facebook'></span>
+			<span class='st_googleplus_large' displayText='Google +'></span>
+			<span class='st_twitter_large' displayText='Tweet'></span>
+			<span class='st_linkedin_large' displayText='LinkedIn'></span>
+			<span class='st_pinterest_large' displayText='Pinterest'></span>
+			<span class='st_email_large' displayText='Email'></span>
+		</p>
+
+		<p style="text-align:center">Why not hire <a href="http://www.tomchambers.me">Tom Chambers</a> for a front end dev position?</p>
 	</div>
 
 	<canvas id="drawing" resize></canvas>
@@ -39,6 +72,9 @@
 	  <div class="handle ne"></div>
 	  <div class="handle se"></div>
 	  <div class="handle sw"></div>
+	</div>
+	<div class="base">
+		
 	</div>
 </body>
 </html>

@@ -1,7 +1,8 @@
 window.onload = function() {
+	var supportsVibrate = "vibrate" in navigator;
+
 	var channel = prompt("Enter the code from http://url.com to link and start playing");
 	
-
 	FastClick.attach(document.body);
 
 	var socket = io();	
@@ -11,32 +12,37 @@ window.onload = function() {
 		var touchTimer;
 		var strength;
 		var touchPad = document.getElementById('touch');
+		var intervals = {};
 		touchPad.addEventListener('touchstart', function(e) {
 			e.preventDefault();
 			console.log('hit');
 			touchTimer = Date.now();
 
-			/*setInterval(function() {
-				var width = (Date.now() - touchTimer);
-				var widthPercent = width / 1000 * 100;
-				document.getElementById('progress').style.width = widthPercent + '%';
-			}, 16);*/
+			intervals.interval = setInterval(function() {
+				touchLength = Date.now() - touchTimer;
+
+				var widthPercent = (touchLength / 400) * 100;
+				widthPercent = widthPercent > 100 ? '100' : widthPercent;
+				document.getElementById('progress-bar-blocker').style.width = (100-widthPercent) + '%';	
+			}, 16);
 		});
 		touchPad.addEventListener('touchend', function() {
+			clearInterval(intervals.interval);
 			console.log('released')
-			touchTimer = Date.now() - touchTimer;
-			document.getElementById('power').innerHTML = touchTimer;
+			touchLength = Date.now() - touchTimer;
 
-			var widthPercent = (touchTimer / 250) * 100;
-			console.log(widthPercent);
+			var widthPercent = (touchLength / 250) * 100;
 			widthPercent = widthPercent > 100 ? '100' : widthPercent;
-			document.getElementById('progress').style.width = widthPercent + '%';	
+			document.getElementById('progress-bar-blocker').style.width = (100-widthPercent) + '%';	
 			strength = widthPercent;		
 		});
 
 
 		touchPad.addEventListener('click', function() {
 			socket.emit('hit', {strength: strength});
+			if (supportsVibrate) {
+				navigator.vibrate(300);
+			};
 		});
 
 		window.addEventListener('deviceorientation', function(event) {

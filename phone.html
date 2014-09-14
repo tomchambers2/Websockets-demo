@@ -3,9 +3,10 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no">
-	<title>Websockets demo</title>
+	<title>MEGASPACECANNON1000 CONTROLLER</title>
 	<script src="//cdn.socket.io/socket.io-1.1.0.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.2/fastclick.min.js"></script>
+	<link href="//fonts.googleapis.com/css?family=Coda" rel="stylesheet" type="text/css">	
 	<script src="phone.js"></script>
 	<style>
 		html, body {
@@ -13,43 +14,55 @@
 			width: 100%;
 			margin: 0;
 			padding: 0;
-			background: #C49D79;
+			background: #000;
+			color: #fff;
+			font-family: 'Coda';
 		}
 		#touch {
 			position: fixed;
-			height: 100%;
-			width: 100%;
+			height: 92%;
+			width: 92%;
+			margin: 4%;
 			text-align: center;
-		}
-		h1 {
-			font-family: Sans-Serif;	
-			color: #fff;
+			border: 2px dashed grey;
 		}
 		.text {
 			margin: 0 auto;
 			width: 80%;
 			text-align: center;
 		}
-		#progress-bar {
+		#progress-container {
 			width: 100%;
-			height: 25px;
+			height: 100px;
+			position: relative;			
 		}
-		#progress {
-			width: 50%;
+		#progress-bar {
 			height: 100%;
-			background: blue;
+			background: linear-gradient(to right, green 0%, red 85%);
+		}
+		#progress-bar-blocker {
+			content: '';
+			right: 0;
+			top: 0;
+			width: 0%;			
+			position: absolute;
+			display: block;
+			height: 100%;
+			background: #000;
 		}
 	</style>
 </head>
 <body>
 	<div id="touch">
 		<div class="text">
-			<div id="progress-bar">
-				<div id="progress"></div>
+			<h1>Tap to fire</h1>
+			<div id="progress-container">
+				<div id="progress-bar"></div>
+				<div id="progress-bar-blocker"></div>
 			</div>
-			<span id="power">0</span>
-			<h1>Tap anywhere to fire the cannon!</h1>
-			<img src="images/cannon.png" alt="">
+			<h2>Longer press = more power</h2>
+
+			<p>If it stops working refresh page on both phone and desktop</p>
 		</div>
 	</div>	
 </body>

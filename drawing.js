@@ -6,13 +6,16 @@ var score = 0;
 var loading = true;
 var gameOver = false;
 var timePassed = 0;
+var textColor = 'white';
 
 var TOTAL_LIVES = 5;
-var HIT_SCORE = 100;
-var DROP_RATE = 150; //will drop 1 in every n frames
+var HIT_SCORE = 250;
+var DROP_RATE = 100; //will drop 1 in every n frames
 var FONT_FAMILY = 'Coda';
 var FONT_SIZE = 30;
-var TIME_IN_SECONDS = 120;
+var TIME_IN_SECONDS = 60;
+
+var employeeStatus = ['0 - Fired!','1 - Button jockey','2 - Panel technician','3 - Chief astrologer and throat warbler','4 - Radio muncher','5 - Telescope pusher','6 - Rocket fuel pumper','7 - Flight director','8 - Spaceship manager','9 - Director general','10 - Stephen Hawking\'s PA','11 - Will Smith in Independence Day']
 
 var LIVES = TOTAL_LIVES;
 
@@ -77,7 +80,7 @@ function addToScore(increment) {
 var scoreText = new PointText(new Point(30,40));
 scoreText.fontFamily = FONT_FAMILY;
 scoreText.fontSize = FONT_SIZE;
-scoreText.fillColor = 'black';
+scoreText.fillColor = textColor;
 addToScore(0);
 
 function str_pad_left(string,pad,length){   return (new Array(length+1).join(pad)+string).slice(-length);   } 
@@ -91,7 +94,7 @@ function updateTimerSeconds(seconds) {
 var timerText = new PointText(new Point(view.bounds.width - 335,40));
 timerText.fontFamily = FONT_FAMILY;
 timerText.fontSize = FONT_SIZE;
-timerText.fillColor = 'black';
+timerText.fillColor = textColor;
 var timer = TIME_IN_SECONDS;
 updateTimerSeconds(timer);
 
@@ -109,13 +112,14 @@ function decrementLives() {
 var livesText = new PointText(new Point(view.bounds.width / 2 - 100,40));
 livesText.fontFamily = FONT_FAMILY;
 livesText.fontSize = FONT_SIZE;
-livesText.fillColor = 'black';
+livesText.fillColor = textColor;
 livesText.content = 'Lives: '+LIVES;
 
 function showMessage(content) {
 	var message = new PointText(new Point(view.bounds.width, view.bounds.height) * Point.random());
 	message.content = content;
 	message.fontFamily = FONT_FAMILY;
+	message.fillColor = textColor;
 	message.fontSize = 60;	
 	setTimeout(function() {
 		message.content = '';
@@ -144,6 +148,17 @@ function onFrame(event) {
 	if (loading) return;
 	if (gameOver) {
 		document.getElementById('gameover').style.display = 'block';
+		if (LIVES > 0) {
+			document.getElementById('won').style.display = 'block';
+		} else {
+			document.getElementById('died').style.display = 'block';
+		}
+		var employeeLevel = Math.floor(score / 1000);
+		console.log(employeeLevel);
+		if (employeeLevel > employeeStatus.length -1) {
+			employeeLevel = employeeLevel.length - 1;
+		}
+		document.getElementById('employee-status').innerHTML = employeeStatus[employeeLevel];
 		document.getElementById('final-score').innerHTML = score;
 		document.getElementById('restart-button').addEventListener('click', function() {
 			restartGame();
@@ -195,8 +210,12 @@ function onFrame(event) {
 			}
 			if (circles[i].hitTest(point, hitOptions)) {
 				circles[i].kills.push(dropping[j].id);
+				console.log("hit image is", dropping[j].id)
 				dropping[j].dead = true;
-				dropping[j].fillColor = 'red';
+				
+				dropping[j].source = 'explosion';
+				dropping[j].scale(4);
+
 				dropping[j].velocity = 10;
 				addToScore(HIT_SCORE);
 				circles[i].hits++;
@@ -222,6 +241,9 @@ function onFrame(event) {
 			continue;
 		}
 		dropping[k].position.y += dropping[k].velocity;
+		if (dropping[k].dead) {
+			dropping[k].rotate(1);
+		}
 	}
 
 	if (event.count % DROP_RATE === 0) {
