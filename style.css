@@ -51,34 +51,6 @@ p {
 	transform-origin: center bottom;
 	z-index: 1000;
 }
-/*
-.phone:before {
-	background-color: #262626;
-    background-image: -webkit-linear-gradient(hsla(0,0%,100%,.25), hsla(0,0%,0%,.25));
-    bottom: 0;
-    content: '';
-    left: 0px;
-    position: absolute;
-    top: 0;
-    transform: rotateY(-90deg);
-    transform-origin: 100% 50%;
-    width: 20px;
-    z-index: -10;
-}
-.phone:after {
-	background-color: #262626;
-    background-image: -webkit-linear-gradient(hsla(0,0%,100%,.25), hsla(0,0%,0%,.25));
-    bottom: 0;
-    content: '';
-    left: 132px;
-    position: absolute;
-    top: 0;
-    transform: rotateY(-90deg);
-    transform-origin: 100% 50%;
-    width: 20px;
-    z-index: -10;
-}
-*/
 #score-container {
 	position: fixed;
 	top: 10px;
@@ -102,6 +74,8 @@ p {
 	background: #fff;
 	z-index: 10000;
 	text-align:center;
+	overflow: scroll;
+	max-height: calc(92% - 50px);
 }
 #gameover {
 	position: fixed;
@@ -115,6 +89,8 @@ p {
 	z-index: 10000;
 	text-align:center;
 	display: none;
+	overflow: scroll;
+	max-height: calc(92% - 50px);
 }
 #won, #died {
 	display: none;
