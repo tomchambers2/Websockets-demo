@@ -7,17 +7,30 @@ var loading = true;
 var gameOver = false;
 var timePassed = 0;
 var textColor = 'white';
+var playedEndSound = false;
+var soundsOn = true;
 
 var TOTAL_LIVES = 5;
 var HIT_SCORE = 250;
-var DROP_RATE = 100; //will drop 1 in every n frames
+var DROP_RATE = 150; //will drop 1 in every n frames
 var FONT_FAMILY = 'Coda';
 var FONT_SIZE = 30;
 var TIME_IN_SECONDS = 60;
 
-var employeeStatus = ['0 - Fired!','1 - Button jockey','2 - Panel technician','3 - Chief astrologer and throat warbler','4 - Radio muncher','5 - Telescope pusher','6 - Rocket fuel pumper','7 - Flight director','8 - Spaceship manager','9 - Director general','10 - Stephen Hawking\'s PA','11 - Will Smith in Independence Day']
+var employeeStatus = ['0 - Fired!','1 - Button jockey','2 - Panel technician','3 - Chief astrologer and throat warbler','4 - Space turkey','5 - Telescope fondler','6 - Rocket fuel pumper','7 - Flight director','8 - Spaceship manager','9 - Chief bigshot','10 - Stephen Hawking\'s PA','11 - Will Smith in Independence Day']
 
 var LIVES = TOTAL_LIVES;
+
+var explosion = new Audio('sounds/explosion.ogg');
+var applause = new Audio('sounds/applause.mp3');
+var boo = new Audio('sounds/boo.wav');
+var cannon = new Audio('sounds/cannon.wav');
+var backgroundMusic = new Audio('sounds/music.mp3');
+backgroundMusic.addEventListener('ended', function() {
+	this.currentTime = 0;
+	this.play();
+})
+backgroundMusic.play();
 
 socket.on('rotation', function(msg) {
 	if (loading===true) {
@@ -37,6 +50,10 @@ socket.on('rotation', function(msg) {
 socket.on('hit', function(msg) {
 	if (!loading && !gameOver) {
 		fireItem($('.handle.nw').offset().left + phoneWidth, $('.handle.nw').offset().top, msg.strength);
+		cannon.play();
+		if (msg.strength<40) {
+			showMessage("TAP HARDER!")
+		}
 	}
 });
 
@@ -53,7 +70,7 @@ function dropItem() {
 	var positionX = Math.floor(Math.random() * view.bounds.width);
 	raster.position = new Point(positionX,-50);
 	raster.scale(0.3)
-	raster.velocity = 1;
+	raster.velocity = 3;
 	raster.fillColor = 'green';
 	raster.rotation = 0;
 	dropping.push(raster);
@@ -61,7 +78,16 @@ function dropItem() {
 
 function fireItem(x,y,strength) {
 	var circle = new Path.Circle(new Point(x,y), 30);
-	circle.fillColor = 'black';
+
+	//circle.fillColor = 'black';
+	circle.fillColor = {
+		gradient: {
+			stops: ['#3E3E3E','black'],
+			radial: true
+		},
+		origin: circle.position - 10,
+		destination: circle.bounds.rightCenter
+	}
 	var velocity = 14 * (strength / 100);
 	circle.velocityY = velocity;
 	circle.velocityX = velocity;
@@ -116,7 +142,7 @@ livesText.fillColor = textColor;
 livesText.content = 'Lives: '+LIVES;
 
 function showMessage(content) {
-	var message = new PointText(new Point(view.bounds.width, view.bounds.height) * Point.random());
+	var message = new PointText(new Point(view.bounds.width - 400, view.bounds.height - 400) * Point.random());
 	message.content = content;
 	message.fontFamily = FONT_FAMILY;
 	message.fillColor = textColor;
@@ -130,9 +156,12 @@ function restartGame() {
 	score = 0;
 	timer = TIME_IN_SECONDS;
 	LIVES = TOTAL_LIVES;
+	DROP_RATE = 150;
 	livesText.content = 'Lives: '+LIVES;
 	updateTimerSeconds(timer);
 	gameOver = false;
+	document.getElementById('won').style.display = 'none';
+	document.getElementById('died').style.display = 'none';
 	document.getElementById('gameover').style.display = 'none';
 	for (var i = 0;i<circles.length;i++) {
 		circles[i].remove();
@@ -149,14 +178,25 @@ function onFrame(event) {
 	if (gameOver) {
 		document.getElementById('gameover').style.display = 'block';
 		if (LIVES > 0) {
+			console.log('player won');
+			if (!playedEndSound && soundsOn === true) {
+				applause.play();
+				playedEndSound = true;
+			}
 			document.getElementById('won').style.display = 'block';
 		} else {
+			console.log('player lost');
+			if (!playedEndSound && soundsOn === true) {
+				boo.play();
+				playedEndSound = true;
+			}
 			document.getElementById('died').style.display = 'block';
 		}
 		var employeeLevel = Math.floor(score / 1000);
 		console.log(employeeLevel);
-		if (employeeLevel > employeeStatus.length -1) {
-			employeeLevel = employeeLevel.length - 1;
+		console.log(employeeStatus.length, employeeStatus.length - 1);
+		if (employeeLevel > employeeStatus.length - 1) {
+			employeeLevel = employeeStatus[length - 1];
 		}
 		document.getElementById('employee-status').innerHTML = employeeStatus[employeeLevel];
 		document.getElementById('final-score').innerHTML = score;
@@ -173,6 +213,8 @@ function onFrame(event) {
 		}
 		updateTimerSeconds(timer);
 		timePassed = event.time;
+
+		DROP_RATE -= 2;
 	}
 
 	for (var i = 0;i<circles.length;i++) {
@@ -196,6 +238,7 @@ function onFrame(event) {
 
 		circles[i].position.x -= moveX;
 		circles[i].position.y -= moveY;
+		circles[i].rotate(1);
 
 		for (var j = 0;j<dropping.length;j++) {
 			if (circles[i].kills.indexOf(dropping[j].id) > -1) {
@@ -209,6 +252,7 @@ function onFrame(event) {
 				tolerance: 65
 			}
 			if (circles[i].hitTest(point, hitOptions)) {
+				if (soundsOn === true) { explosion.play(); };
 				circles[i].kills.push(dropping[j].id);
 				console.log("hit image is", dropping[j].id)
 				dropping[j].dead = true;

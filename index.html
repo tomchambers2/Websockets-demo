@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Websockets demo</title>
+	<title>MEGASPACECANNON1000</title>
 	<script src="https://cdn.socket.io/socket.io-1.1.0.js"></script>
 	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<script src="paper-full.min.js"></script>
@@ -18,11 +18,12 @@
 <body>
 	<img src="images/parachute.png" id="parachute" style="display:none">
 	<img src="images/explosion.png" id="explosion" style="display:none">
+	<img src="images/ball.png" id="ball" style="display:none">
 	<div id="intro">
 		<h1>Megaspacecannon 1000</h1>
 		<p>The year is 2035. Probes seeking out inhabitable planets have all failed and are now returning to earth. However, the earth's population has grown so large that even more one more returning astronaut could cause the crust to collapse. This would mean that an employee of NASA would have to fill in a form.</p>
 
-		<p>You are that employee of NASA and rather than pick up a damned pen you decided to retrofit a terrestial telescope into mankind's deadliest weapon - the cannon. You follow the winding track up to the observatory and wipe the sweat from your brow as you grip the improvised cannon controls. You're just like Will Smith in Independence Day.</p>
+		<p>You are that employee. Rather than pick up a damned pen you decided to retrofit a terrestial telescope into mankind's deadliest weapon - the cannon. You follow the winding track up to the observatory and wipe the sweat from your brow as you grip the improvised cannon controls. You're just like Will Smith in Independence Day.</p>
 
 		<h2>To play follow these instructions:</h2>
 		
@@ -32,7 +33,10 @@
 		<h3>2. On your phone enter this code: <span id="code">----</span></h3>
 
 		<h3>3. The game will start automatically</h3>
+		<hr>
 		<p>Created by <a href="http://www.tomchambers.me">Tom Chambers</a>. <a href="mailto:tomchambers@gmail.com">Report bug</a></p>
+
+		<p>Music by: <a href="http://www.newgrounds.com/audio/listen/583188">Croirefly</a>. Licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons</a>. <a href="https://github.com/tomchambers2/Websockets-demo">Github</a>
 	</div>
 
 	<div id="gameover">
@@ -66,7 +70,7 @@
 		<p style="text-align:center">Why not hire <a href="http://www.tomchambers.me">Tom Chambers</a> for a front end dev position?</p>
 	</div>
 
-	<canvas id="drawing" resize></canvas>
+	<canvas id="drawing" resize keepalive="true"></canvas>
 	<div class="phone" id="phone">
 	  <div class="handle nw"></div>
 	  <div class="handle ne"></div>
@@ -74,7 +78,8 @@
 	  <div class="handle sw"></div>
 	</div>
 	<div class="base">
-		
+	
 	</div>
+	<div class="base-banner"></div>
 </body>
 </html>

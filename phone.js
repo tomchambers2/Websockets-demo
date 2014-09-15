@@ -1,7 +1,7 @@
 window.onload = function() {
 	var supportsVibrate = "vibrate" in navigator;
 
-	var channel = prompt("Enter the code from http://url.com to link and start playing");
+	var channel = prompt("Enter the code from megaspacecannon1000.tomchambers.me to link and start playing");
 	
 	FastClick.attach(document.body);
 

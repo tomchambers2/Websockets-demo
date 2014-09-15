@@ -9,20 +9,34 @@ html, body {
 	overflow: hidden;
 }
 p {
-	text-align: justify;
+	text-align: center;
 }
 .base {
 	background: url(images/base.png);
-	left: 40px;
+	left: 28px;
 	right: 0;
 	margin: auto;
 	position: absolute;
 	z-index: 2000;
-	height: 189px;
-	width: 412px;
+	height: 250px;
+	width: 100%;
 	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
 	bottom: 0;
 	transform: translate3d(0,0,0);	
+}
+.base-banner {
+	z-index: 1500;
+	height: 50px;
+	width: 100%;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+	bottom: 0;
+	position: absolute;
+	transform: translate3d(0,0,0);		
+	background-image: linear-gradient(to top, #030202 0px, #030202 0px, transparent 30px);
 }
 .phone {
 	background: url(images/megacannon.png) no-repeat;
@@ -33,7 +47,7 @@ p {
 	left: 0;
 	right: 0;
 	margin: auto;
-	bottom: 140px;
+	bottom: 190px;
 	transform-origin: center bottom;
 	z-index: 1000;
 }
